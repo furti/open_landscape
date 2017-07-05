@@ -1,0 +1,13 @@
+1. Check if layer is empty (Exclude Camera and Lights) 	(DONE)
+	- Proceed 											(DONE)
+	- Clear Layer 										(DONE)
+	- Cancel 											(DONE)
+2. Calculate Mesh data from openstreetmap data
+3. draw mesh
+	- Define mesh data types
+4. Add height information
+5. Cache open streetmap data
+	- Check for reload									(DONE)
+	- Check for changes in origin						(DONE)
+	- Clear Cache
+	- Show cached data
