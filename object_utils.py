@@ -56,6 +56,4 @@ def calculateEdges(vertices):
 
     edges = zip(zeroBasedVertexIndex, oneBasedVertexIndex)
 
-    print(edges)
-
     return list(edges)

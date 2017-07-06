@@ -15,6 +15,7 @@ from . import create_landscape
 from . import open_landscape_properties
 from . import open_landscape_ui
 from . import open_landscape_math
+from . import cache_operators
 
 if 'bpy' in sys.modules:
     import importlib
@@ -32,6 +33,8 @@ def register():
     """Register the addon"""
     bpy.utils.register_class(create_landscape.ProceedAnyway)
     bpy.utils.register_class(create_landscape.DeleteObjects)
+    bpy.utils.register_class(cache_operators.ClearCacheOperator)
+    bpy.utils.register_class(cache_operators.ShowCacheOperator)
     bpy.utils.register_class(create_landscape.CreateLandscape)
     bpy.utils.register_class(open_landscape_properties.OpenLandscapeProperties)
     bpy.utils.register_class(open_landscape_ui.OpenLandscapeOriginPanel)
@@ -48,6 +51,8 @@ def unregister():
     bpy.utils.unregister_class(
         open_landscape_properties.OpenLandscapeProperties)
     bpy.utils.unregister_class(create_landscape.CreateLandscape)
+    bpy.utils.unregister_class(cache_operators.ClearCacheOperator)
+    bpy.utils.unregister_class(cache_operators.ShowCacheOperator)
     bpy.utils.unregister_class(create_landscape.DeleteObjects)
     bpy.utils.unregister_class(create_landscape.ProceedAnyway)
 

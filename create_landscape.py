@@ -19,9 +19,6 @@ def checkForObjects(context: bpy.types.Context):
 
 
 def mustReload(props):
-    if props.cached_openstreetmap_xml:
-        return False
-
     if props.origin_lat != props.cached_origin_lat:
         return True
 
@@ -31,6 +28,9 @@ def mustReload(props):
     if props.origin_radius != props.cached_origin_radius:
         return True
 
+    if props.cached_openstreetmap_xml:
+        return False
+
     return False
 
 
@@ -38,7 +38,7 @@ def loadFromServer(props) -> overpy.Result:
     overpass = overpy.Overpass()
 
     if mustReload(props):
-        print('loading from server');
+        print('OpenLandscape: loading from server...')
 
         origin = open_landscape_math.CoordinatePoint(
             props.origin_lat, props.origin_lon)
@@ -55,23 +55,24 @@ def loadFromServer(props) -> overpy.Result:
             rel
                 {bounding_box};
             );
-            (._;>;);
-            out;""".format(bounding_box = bounding_box)
+            out;""".format(bounding_box=bounding_box)
+
+            # (._;>;); Maybe we need this to load all referenced nodes and ways
 
         url = 'http://overpass-api.de/api/interpreter'
         with urllib.request.urlopen(url, query.encode("utf-8")) as response:
             overpass_xml = response.read().decode('utf-8')
-
-        print(overpass_xml)
 
         props.cached_origin_lat = props.origin_lat
         props.cached_origin_lon = props.origin_lon
         props.cached_origin_radius = props.origin_radius
         props.cached_openstreetmap_xml = overpass_xml
 
+        print('OpenLandscape: Finished loading from server')
+
         return overpass.parse_xml(overpass_xml)
     else:
-        print('using from cache')
+        print('OpenLandscape: Using Data From Cache')
 
         return overpass.parse_xml(props.cached_openstreetmap_xml)
 
