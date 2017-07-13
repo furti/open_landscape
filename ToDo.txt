@@ -3,11 +3,18 @@
 	- Clear Layer 										(DONE)
 	- Cancel 											(DONE)
 2. Calculate Mesh data from openstreetmap data
-3. draw mesh
-	- Define mesh data types
+	- map tags to internal types and subtypes			(DONE)
+	- calculate vertices								(DONE)							
 4. Add height information
 5. Cache open streetmap data
 	- Check for reload									(DONE)
 	- Check for changes in origin						(DONE)
-	- Clear Cache
-	- Show cached data
+	- Clear Cache										(DONE)
+	- Show cached data									(DONE)
+5. Possibility to select mesh type
+	- 2d
+	- 3d
+6. Possibility to select draw type
+	- color
+	- low poly
+	- realistic

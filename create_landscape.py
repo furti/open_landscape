@@ -48,16 +48,16 @@ def loadFromServer(props) -> overpy.Result:
 
         query = """
         (
-            node
-                {bounding_box};
-            way
-                {bounding_box};
-            rel
-                {bounding_box};
-            );
-            out;""".format(bounding_box=bounding_box)
+            node{bounding_box};
+            rel(bn)->.x;
+            way{bounding_box};
+            node(w)->.x;
+        );
+        out meta;""".format(bounding_box=bounding_box)
 
-            # (._;>;); Maybe we need this to load all referenced nodes and ways
+        print('OpenLandscape: Executing query {query}'.format(query=query))
+
+        # rel(bw); We can add this in the join of the query at the end to get all relations
 
         url = 'http://overpass-api.de/api/interpreter'
         with urllib.request.urlopen(url, query.encode("utf-8")) as response:
@@ -85,25 +85,23 @@ class CreateLandscape(bpy.types.Operator):
 
     def execute(self, context: bpy.types.Context):
         scene = context.scene
+        props = scene.open_landscape_properties
 
-        overpy_result = loadFromServer(scene.open_landscape_properties)
+        overpy_result = loadFromServer(props)
+        origin = open_landscape_math.CoordinatePoint(
+            props.origin_lat, props.origin_lon)
 
-        object_utils.buildObjects([
-            object_utils.OpenLandscapeObject(
-                name="Wiese", vertices=[(1, 1, 0), (1, -1, 0), (1, -2, 0), (-1, -2, 0), (-1, -1, 0),
-                                        (-1, 1, 0)]),
+        objects = object_utils.build_objects_from_overpass(overpy_result, origin)
 
-            object_utils.OpenLandscapeObject(
-                name="Wald", vertices=[(4, 4, 0), (4, 2, 0), (2, 2, 0), (2, 4, 0)])
-        ])
+        object_utils.buildObjects([o for o in objects if o.draw_as_mesh])
 
         return {'FINISHED'}
 
     def invoke(self, context, event):
         if checkForObjects(context):
-            windowManager = context.window_manager
+            window_manager = context.window_manager
 
-            return windowManager.invoke_popup(self)
+            return window_manager.invoke_popup(self)
         else:
             return self.execute(context)
 
